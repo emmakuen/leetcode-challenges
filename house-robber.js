@@ -72,3 +72,24 @@ function robber2(nums) {
   // return whichever's bigger of last two max totals in the array
   return Math.max(nums[nums.length - 1], nums[nums.length - 2]);
 }
+
+// Version 3
+
+function robber3(nums) {
+  // initialize two pointers to track two accumulated total values
+  let currentMax = 0;
+  let previousMax = 0;
+
+  // loop over houses and compare two accumulated total values to come up with max
+  nums.forEach((current) => {
+    // as loop moves up, previous max becomes previous of previous as it tracks houses up to n-2 index
+    let prevPreviousMax = previousMax;
+    // assign whichever's bigger of two max to previous max
+    previousMax = Math.max(currentMax, previousMax);
+    // add prevPreviousMax to current value and assign it to current max
+    // prevPreviousMax tracks houses up to n-2 index, so currentMax would be total of non-adjacent houses
+    currentMax = prevPreviousMax + current;
+  });
+
+  return Math.max(currentMax, previousMax);
+}
