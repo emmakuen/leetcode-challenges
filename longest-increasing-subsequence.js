@@ -45,3 +45,6 @@ function lengthOfLIS(nums) {
   // return the longest subsequence length
   return max;
 }
+
+// Time Complexity --- O(amount * coins.length)
+// Space Complexity --- O(amount)
