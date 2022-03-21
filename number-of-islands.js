@@ -52,6 +52,7 @@ function numIslands(grid) {
     if (isOutsideGrid || grid[row][col] === "0") return;
     // else, sink the current land to avoid conducting bfs on it again
     grid[row][col] = "0";
+    // to find the adjacent land masses that constitute the island,
     // conduct breadth first search on current cell's neighbors
     // on the right,
     bfs(grid, row + 1, col);
