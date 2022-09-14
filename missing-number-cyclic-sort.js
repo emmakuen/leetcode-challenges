@@ -24,14 +24,15 @@ const findMissingNumber = (nums) => {
     const num = nums[currentIndex];
     const correctIndex = num;
 
-    // if the number is not the last one and the current index of the number is not the correct one, switch the number to place it at its correct index
+    // if the number is within the permitted range (the array has one missing number, so the last number's actual index would be out of range)
+    // and if the current index of the number is not the correct one, switch the number to place it at its correct index
     if (num < lastNum && correctIndex !== currentIndex) {
       [nums[correctIndex], nums[currentIndex]] = [
         nums[currentIndex],
         nums[correctIndex],
       ];
     } else {
-      // if the number is in its correct index, move to the next index
+      // if the number is out of range or if it's in its correct index, move to the next index
       currentIndex++;
     }
   }
@@ -40,7 +41,7 @@ const findMissingNumber = (nums) => {
   currentIndex = 0;
 
   while (currentIndex < nums.length) {
-    // if the number at the current index is not the correct one, it's the missing number
+    // if the number at the current index is not the correct one, return that index as the missing number
     if (currentIndex !== nums[currentIndex]) {
       return currentIndex;
     } else {
