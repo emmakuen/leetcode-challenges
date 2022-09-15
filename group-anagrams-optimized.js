@@ -24,19 +24,19 @@ const groupAnagrams = (strs) => {
   const aCharCode = "a".charCodeAt(0);
 
   for (let strIndex = 0; strIndex < strs.length; strIndex++) {
-    counts = Array(26).fill(0);
+    const charCounts = Array(26).fill(0);
     const str = strs[strIndex];
 
     for (let charIndex = 0; charIndex < str.length; charIndex++) {
-      const index = str.charCodeAt(charIndex) - aCharCode;
-      counts[index]++;
+      const charCountsIndex = str.charCodeAt(charIndex) - aCharCode;
+      charCounts[charCountsIndex]++;
     }
 
-    const strKey = counts.toString();
-    if (strKey in anagramMap) {
-      anagramMap[strKey].push(str);
+    const mapKey = charCounts.toString();
+    if (mapKey in anagramMap) {
+      anagramMap[mapKey].push(str);
     } else {
-      anagramMap[strKey] = [str];
+      anagramMap[mapKey] = [str];
     }
   }
 
