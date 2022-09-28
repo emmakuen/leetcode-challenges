@@ -11,26 +11,21 @@
 // s consists of English letters, digits, symbols and spaces.
 
 function lengthOfLongestSubstring(s) {
-  if (typeof s !== "string") return undefined;
-  if (s.length <= 1) return s.length;
+  if (s.length < 2) return s.length;
+  let seen = new Set();
+  let left = 0;
+  let maxLength = 0;
 
-  let charsMap = {}; // map substring letters & their indices in the string
-
-  let startIndex = 0; // start of substring
-  let maxLength = 0; // length of longest substring
-
-  for (let endIndex = 0; endIndex < s.length; endIndex++) {
-    let endChar = s[endIndex];
-
-    // if there's a duplicate value in substring, exclude it
-    if (charsMap[endChar] >= startIndex) {
-      startIndex = charsMap[endChar] + 1;
+  for (let right = 0; right < s.length; right++) {
+    // if the current character is repeated, slide the window from left until there's no repeating character
+    while (seen.has(s[right])) {
+      seen.delete(s[left]);
+      left++;
     }
-    // set or update index of end character
-    charsMap[endChar] = endIndex;
 
-    // if current substring length is greater, update max length
-    maxLength = Math.max(maxLength, endIndex - startIndex + 1);
+    // add the new character and update max
+    seen.add(s[right]);
+    maxLength = Math.max(maxLength, right - left + 1);
   }
 
   return maxLength;
