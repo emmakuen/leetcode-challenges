@@ -56,7 +56,7 @@ const findWords = function (board, words) {
   }
 
   // initialize a set to store nonduplicate words that are found
-  const wordsFound = new Set();
+  const wordsFound = [];
 
   function dfs(row, col, word, node) {
     if (!node) return;
@@ -70,7 +70,11 @@ const findWords = function (board, words) {
     word += character;
     node = node.children[character];
 
-    if (node.isEndOfWord) wordsFound.add(word);
+    if (node.isEndOfWord) {
+      wordsFound.push(word);
+      // to avoid duplicates, set the isEndOfWord property to false
+      node.isEndOfWord = false;
+    }
 
     // replace the character in the current cell with an empty string to avoid revisits
     board[row][col] = "";
@@ -90,5 +94,5 @@ const findWords = function (board, words) {
     }
   }
 
-  return [...wordsFound];
+  return wordsFound;
 };
