@@ -36,36 +36,36 @@ If 99% of all integer numbers from the stream are in the range [0, 100], how wou
 
 class MedianFinder {
   constructor() {
-    this.leftHeap = new BinaryHeap(true);
-    this.rightHeap = new BinaryHeap(false);
+    this.maxHeap = new BinaryHeap(true);
+    this.minHeap = new BinaryHeap(false);
   }
 
   addNum(num) {
-    if (this.leftHeap.peek() === null || num < this.leftHeap.peek()) {
-      this.leftHeap.add(num);
+    if (this.maxHeap.peek() === null || num < this.maxHeap.peek()) {
+      this.maxHeap.add(num);
     } else {
-      this.rightHeap.add(num);
+      this.minHeap.add(num);
     }
 
-    if (this.leftHeap.size - this.rightHeap.size > 1) {
-      const max = this.leftHeap.poll();
-      this.rightHeap.add(max);
-    } else if (this.rightHeap.size - this.leftHeap.size > 1) {
-      const min = this.rightHeap.poll();
-      this.leftHeap.add(min);
+    if (this.maxHeap.size - this.minHeap.size > 1) {
+      const max = this.maxHeap.poll();
+      this.minHeap.add(max);
+    } else if (this.minHeap.size - this.maxHeap.size > 1) {
+      const min = this.minHeap.poll();
+      this.maxHeap.add(min);
     }
   }
 
   findMedian() {
-    if (!this.leftHeap.size && !this.rightHeap.size) return null;
-    if (this.leftHeap.size === this.rightHeap.size) {
-      return (this.leftHeap.peek() + this.rightHeap.peek()) / 2;
+    if (!this.maxHeap.size && !this.minHeap.size) return null;
+    if (this.maxHeap.size === this.minHeap.size) {
+      return (this.maxHeap.peek() + this.minHeap.peek()) / 2;
     }
-    if (this.leftHeap.size < this.rightHeap.size) {
-      return this.rightHeap.peek();
+    if (this.maxHeap.size < this.minHeap.size) {
+      return this.minHeap.peek();
     }
 
-    return this.leftHeap.peek();
+    return this.maxHeap.peek();
   }
 }
 
