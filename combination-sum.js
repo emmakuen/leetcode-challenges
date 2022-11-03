@@ -39,7 +39,7 @@ var combinationSum = function (candidates, target) {
       return;
     }
 
-    // if either there's no more candidate to consider or sum exceeds target, return
+    // if either there's no more candidate to consider or sum exceeds target, abandon the search and backtrack
     if (candidateIndex >= candidates.length || sum > target) return;
 
     // add the current candidate to the addends
