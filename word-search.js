@@ -25,66 +25,51 @@
 // board and word consists of only lowercase and
 // uppercase English letters.
 
-function exist(board, word) {
-  // initialize a variable to keep track of the search result
-  // and set it to false initially
+/**
+ * @param {character[][]} board
+ * @param {string} word
+ * @return {boolean}
+ */
+const exist = function (board, word) {
+  const ROW_LENGTH = board.length;
+  const COLUMN_LENGTH = board[0].length;
   let isFound = false;
 
-  // for each cell of the board
-  for (let row = 0; row < board.length; row++) {
-    for (let col = 0; col < board[0].length; col++) {
-      // if the character in the current cell matches
-      // the first character of the word,
-      // start the depth first search
-      if (board[row][col] === word[0]) {
-        dfs(row, col, word, 0);
-      }
-    }
-  }
-
-  // initialize a depth search function
-  function dfs(row, col, word, count) {
-    // if letter count equals the word length,
-    // the word has been found
-    if (count === word.length) {
-      // therefore, set isFound variable to true
-      // and exit the function
+  function dfs(row, column, wordIndex) {
+    if (wordIndex >= word.length) {
       isFound = true;
       return;
     }
 
-    const isOutOfBound =
-      row < 0 || row >= board.length || col < 0 || col >= board[0].length;
+    if (
+      row >= ROW_LENGTH ||
+      row < 0 ||
+      column >= COLUMN_LENGTH ||
+      column < 0 ||
+      word[wordIndex] !== board[row][column] ||
+      isFound
+    )
+      return;
 
-    // else,
-    // if search is out of bound
-    // or character in the board cell doesn't match
-    // the character of the word currently being searched
-    // exit the function
-    if (isFound || isOutOfBound || board[row][col] !== word[count]) return;
+    const character = board[row][column];
+    board[row][column] = "";
 
-    // else, initialize a temporary variable
-    // and save the current character in it
-    const temp = board[row][col];
-    // assign empty string to current cell
-    // to avoid visiting it again
-    board[row][col] = "";
+    dfs(row + 1, column, wordIndex + 1);
+    dfs(row - 1, column, wordIndex + 1);
+    dfs(row, column + 1, wordIndex + 1);
+    dfs(row, column - 1, wordIndex + 1);
 
-    // conduct depth first search recursively on
-    // the cell to the bottom of current cell (row + 1)
-    dfs(row + 1, col, word, count + 1);
-    // the cell to the top of current cell (row - 1)
-    dfs(row - 1, col, word, count + 1);
-    // the cell to the right of current cell (col + 1)
-    dfs(row, col + 1, word, count + 1);
-    // the cell to the left of current cell (col - 1)
-    dfs(row, col - 1, word, count + 1);
-
-    // when the search finishes, reset the current cell
-    // to its original value
-    board[row][col] = temp;
+    board[row][column] = character;
   }
 
-  // return the search result
+  for (let row = 0; row < ROW_LENGTH; row++) {
+    for (let column = 0; column < COLUMN_LENGTH; column++) {
+      if (isFound) return true;
+      if (board[row][column] === word[0]) {
+        dfs(row, column, 0);
+      }
+    }
+  }
+
   return isFound;
-}
+};
