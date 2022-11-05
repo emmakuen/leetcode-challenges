@@ -27,43 +27,46 @@
 // 1 <= m, n <= 300
 // grid[i][j] is '0' or '1'.
 
+/**
+ * @param {character[][]} grid
+ * @return {number}
+ */
 function numIslands(grid) {
-  // initialize a variable to keep track of island count
-  let islandCount = 0;
-  // iterate on each cell of the grid
+  let count = 0;
+  const updated = [];
+
+  function dfs(row, column) {
+    if (
+      row >= grid.length ||
+      column >= grid[0].length ||
+      row < 0 ||
+      column < 0 ||
+      grid[row][column] !== "1"
+    )
+      return;
+
+    updated.push([row, column]);
+    grid[row][column] = "";
+
+    dfs(row + 1, column);
+    dfs(row - 1, column);
+    dfs(row, column + 1);
+    dfs(row, column - 1);
+  }
+
   for (let row = 0; row < grid.length; row++) {
-    for (let col = 0; col < grid[0].length; col++) {
-      // if the current cell is land
-      if (grid[row][col] === "1") {
-        // increment island count
-        islandCount++;
-        // conduct breadth-first search on the current cell
-        bfs(grid, row, col);
+    for (let column = 0; column < grid[0].length; column++) {
+      if (grid[row][column] === "1") {
+        count++;
+        dfs(row, column);
       }
     }
   }
 
-  // define breadth first search function
-  function bfs(grid, row, col) {
-    const isOutsideGrid =
-      row < 0 || row >= grid.length || col < 0 || col >= grid[0].length;
-
-    // if the current cell is outside grid or it's water, end the breadth first search
-    if (isOutsideGrid || grid[row][col] === "0") return;
-    // else, sink the current land to avoid conducting bfs on it again
-    grid[row][col] = "0";
-    // to find the adjacent land masses that constitute the island,
-    // conduct breadth first search on current cell's neighbors
-    // on the right,
-    bfs(grid, row + 1, col);
-    // on the left,
-    bfs(grid, row - 1, col);
-    // below,
-    bfs(grid, row, col + 1);
-    // above,
-    bfs(grid, row, col - 1);
+  for (let i = 0; i < updated.length; i++) {
+    const [row, column] = updated[i];
+    grid[row][column] = "1";
   }
 
-  // return the island count
-  return islandCount;
+  return count;
 }
