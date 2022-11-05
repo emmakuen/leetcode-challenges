@@ -32,10 +32,13 @@
  * @return {number}
  */
 function numIslands(grid) {
+  // define a count variable to keep track of the number of islands
   let count = 0;
-  const updated = [];
+  // define updated cells array to keep track of updated cells so that we can revert their value at the end
+  const updatedCells = [];
 
   function dfs(row, column) {
+    // if the row or column index is out of bound or the current grid is not a land ("1"), exit the function
     if (
       row >= grid.length ||
       column >= grid[0].length ||
@@ -45,17 +48,22 @@ function numIslands(grid) {
     )
       return;
 
-    updated.push([row, column]);
+    // update the current cell value to an empty string to avoid double counting
     grid[row][column] = "";
+    // add the current cell to the updated cells array
+    updatedCells.push([row, column]);
 
+    // do recursive call on vertically and horizontally adjacent cells
     dfs(row + 1, column);
     dfs(row - 1, column);
     dfs(row, column + 1);
     dfs(row, column - 1);
   }
 
+  // on each cell of the grid
   for (let row = 0; row < grid.length; row++) {
     for (let column = 0; column < grid[0].length; column++) {
+      // if the current cell is a land, add it to the count and call the depth first search function
       if (grid[row][column] === "1") {
         count++;
         dfs(row, column);
@@ -63,8 +71,9 @@ function numIslands(grid) {
     }
   }
 
-  for (let i = 0; i < updated.length; i++) {
-    const [row, column] = updated[i];
+  // revert the values of the updated cells
+  for (let i = 0; i < updatedCells.length; i++) {
+    const [row, column] = updatedCells[i];
     grid[row][column] = "1";
   }
 
