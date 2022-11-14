@@ -22,15 +22,20 @@
 
 // -------- First Solution
 // const climbStairs = (n) => {
-//   if (n <= 3) return n;
+//   // start from the top of the stairs
+//   // from the top stair, there's only one way of moving forward (taking no step)
+//   let first = 1;
+//   // from its previous stair (second from top), there's only one way of going up (taking 1 step)
+//   let second = 1;
 
-//   const ways = [0, 1, 2, 3];
-
-//   for (let i = 4; i <= n; i++) {
-//     ways.push(ways[i - 1] + ways[i - 2]);
+//   // for the remainder, it's equal to the sum of the number of ways available for climbing their previous two stairs
+//   for (let i = 0; i < n - 1; i++) {
+//     const third = first + second;
+//     first = second;
+//     second = third;
 //   }
 
-//   return ways[n];
+//   return second;
 // };
 
 // Solution time complexity is O(n) as the code loops n times
