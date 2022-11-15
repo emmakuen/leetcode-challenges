@@ -28,7 +28,8 @@
 //   // from its previous stair (second from top), there's only one way of going up (taking 1 step)
 //   let second = 1;
 
-//   // for the remainder, it's equal to the sum of the number of ways available for climbing their previous two stairs
+//   // the remainder of steps can be divided into subproblems
+//   // so, they're equal to the sum of the number of ways available for climbing their previous two stairs
 //   for (let i = 0; i < n - 1; i++) {
 //     const third = first + second;
 //     first = second;
@@ -47,18 +48,18 @@ const climbStairs = (n) => {
   if (n <= 3) return n;
 
   // else, initialize two pointers to keep track of the previous steps
-  // one step --> one way of climbing
-  // two step --> two ways of climbing
-  // three or more steps would have a number of climbing that's equal to their previous two steps
-  // e.g. third = first + second
+  // one step --> one way of climbing [1]
+  // two step --> two ways of climbing ([1, 1], [2])
+  // three steps can be divided into two subproblems ==> ways to climb 1 step + ways to climb remaining 2 steps
+  // e.g. third = first + second ([1, 1, 1], [1, 2], [2, 1])
   let first = 1;
   let second = 2;
 
-  // start loop from the third step as first two steps are given
+  // start loop from the third step as the first two steps are given
   for (let i = 3; i <= n; i++) {
-    // add previous two steps to find the number of distinct way to climb the current (i) number of stairs
+    // add the number of ways to climb its previous two steps in order to find the number of distinct way to climb the current (i) number of stairs
     const third = first + second;
-    // shift the pointers each by one step to keep track of the last two steps
+    // shift the pointers each by one to keep track of the previous two steps
     first = second;
     second = third;
 
