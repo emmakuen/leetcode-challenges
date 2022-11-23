@@ -37,5 +37,3 @@ const numDecodings = function (s) {
 
   return findDecodingCountFor(0);
 };
-
-console.log(numDecodings("121"));
