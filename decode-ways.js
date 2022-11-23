@@ -5,33 +5,37 @@
  * @return {number}
  */
 const numDecodings = function (s) {
-  const countFor = {
-    [s.length]: 1,
-  };
+  const decodingCountFor = Array(s.length + 1).fill(Infinity);
+  // if the end of string is reachable, consider there's one way to decode the string
+  decodingCountFor[s.length] = 1;
 
-  function dfs(index) {
-    // if the count for the current index is already cached or it's the last index, return the count
-    if (index in countFor) return countFor[index];
-    // if code at the current index is zero, return zero as the leading zeroes are not allowed
+  function findDecodingCountFor(index) {
+    // if we already know the number of decodings for the current index (if it's cached), return that count
+    if (decodingCountFor[index] !== Infinity) return decodingCountFor[index];
+
+    // if the character at current index is zero, return zero as the leading zeroes are not allowed in the encoding
     if (s[index] === "0") return 0;
 
     // else, find the count of possible decodings for the substring starting from the next index
-    let count = dfs(index + 1);
-    // if there's a next code, and if two digits created from the current and next code can be decoded (valid two digit would be between 10 to 26)
-    // get the count of possible decodings for the substring starting from index + 2 and add it to the current count
+    let decodingCount = findDecodingCountFor(index + 1);
+
+    // if we haven't reached the end of the string, and if current character can create a valid (10~26) double digit code when combined with the next character, this would be another decoding variation
+    // if so, get the count of possible decodings for the substring starting from index + 2 and add it to the current count
     if (index + 1 < s.length) {
-      const doubleDigits = parseInt(s.slice(index, index + 2));
-      if (doubleDigits <= 26) {
-        count += dfs(index + 2);
+      const doubleDigitCode = parseInt(s.slice(index, index + 2));
+      if (doubleDigitCode <= 26 && doubleDigitCode >= 10) {
+        decodingCount += findDecodingCountFor(index + 2);
       }
     }
 
     // memoize the count
-    countFor[index] = count;
+    decodingCountFor[index] = decodingCount;
 
     // and return it
-    return count;
+    return decodingCount;
   }
 
-  return dfs(0);
+  return findDecodingCountFor(0);
 };
+
+console.log(numDecodings("121"));
