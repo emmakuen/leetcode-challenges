@@ -29,6 +29,7 @@ function maxProduct(nums) {
 
   // create variables to keep track of the previous maximum and minimum products
   // and initially assign 1 to both (because 1 * num = num while 0 * num = 0)
+  // the reason why we're tracking the minimum is because it can become maximum when multiplied by a negative number
   let previousMin = 1;
   let previousMax = 1;
 
