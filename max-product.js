@@ -25,42 +25,29 @@
 // guaranteed to fit in a 32-bit integer.
 
 function maxProduct(nums) {
-  // if there's only one number, return that number
-  if (nums.length === 1) return nums[0];
-  // make a list of max and min products of subarrays
-  const maxProducts = [nums[0]];
-  const minProducts = [nums[0]];
-  // initialize a max variable to store the largest product
-  let max = nums[0];
+  let max = -Infinity;
 
-  for (let i = 1; i < nums.length; i++) {
-    // compare the following three values
-    // the max product of subarrays up to i-1 index * current number VS
-    // current number by itself VS
-    // the min product of subarrays up to i-1 index * current number
-    const maxProduct = Math.max(
-      nums[i],
-      nums[i] * maxProducts[i - 1],
-      nums[i] * minProducts[i - 1]
-    );
+  // create variables to keep track of the previous maximum and minimum products
+  // and initially assign 1 to both (because 1 * num = num while 0 * num = 0)
+  let previousMin = 1;
+  let previousMax = 1;
 
-    const minProduct = Math.min(
-      nums[i],
-      nums[i] * maxProducts[i - 1],
-      nums[i] * minProducts[i - 1]
-    );
-    // push the largest value to max products array
-    maxProducts.push(maxProduct);
-    // push the smallest product to min products array
-    minProducts.push(minProduct);
+  // iterate over each number
+  for (let i = 0; i < nums.length; i++) {
+    const num = nums[i];
+    // find the current minimum and maximum by comparing the number itself with it's product with previous min/max
+    const currentMin = Math.min(num, previousMin * num, previousMax * num);
+    const currentMax = Math.max(num, previousMin * num, previousMax * num);
+    // if the current max is greater than the max, update the max
+    max = Math.max(currentMax, max);
 
-    // if current max product is larger than previous max, update the max
-    max = Math.max(max, maxProduct);
+    // for the next iteration, current min/max would become previous min/max
+    previousMin = currentMin;
+    previousMax = currentMax;
   }
 
-  // return the largest product
   return max;
 }
 
 // Time complexity: O(n)
-// Space complexity: O(n)
+// Space complexity: O(1)
