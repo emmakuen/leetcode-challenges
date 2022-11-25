@@ -23,7 +23,10 @@
 // -10 <= nums[i] <= 10
 // The product of any prefix or suffix of nums is
 // guaranteed to fit in a 32-bit integer.
-
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
 function maxProduct(nums) {
   let max = -Infinity;
 
@@ -34,8 +37,7 @@ function maxProduct(nums) {
   let previousMax = 1;
 
   // iterate over each number
-  for (let i = 0; i < nums.length; i++) {
-    const num = nums[i];
+  for (const num of nums) {
     // find the current minimum and maximum by comparing the number itself with it's product with previous min/max
     const currentMin = Math.min(num, previousMin * num, previousMax * num);
     const currentMax = Math.max(num, previousMin * num, previousMax * num);
