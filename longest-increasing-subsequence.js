@@ -15,36 +15,36 @@ Input: nums = [7,7,7,7,7,7,7]
 Output: 1
 */
 
-function lengthOfLIS(nums) {
-  // if the array is empty, the length of subsequence is zero
-  if (nums.length === 0) return 0;
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+const lengthOfLIS = function (nums) {
+  // each number can be a subsequence on their own
+  // so, the maximum length of subsequence can be 1 at minimum
+  let maxLength = 1;
+  // create an array to memoize the max length of a subsequence for each number in nums
+  const maxLengthFor = Array(nums.length).fill(1);
 
-  // each item in array can constitute a subsequence with length of 1
-  // therefore, initialize a new array where each item is equal to 1
-  const LIS = Array(nums.length).fill(1);
-
-  // initialize a temporary that keeps track of the current longest subsequence length
-  let max = 1;
-
-  // for number i
-  for (let i = 1; i < nums.length; i++) {
-    for (let j = 0; j < i; j++) {
-      // if preceding number at index i is less than them, nums[i] and nums[j] are increasing subsequence
-      if (nums[j] < nums[i]) {
-        // therefore, increase the subsequence length at LIS[j] index by 1
-        // compare it to subsequence length at LIS[i] and assign whichever's greater to LIS[i]
-        LIS[i] = Math.max(LIS[i], LIS[j] + 1);
+  // for each number starting from the second last index
+  for (let i = nums.length - 2; i >= 0; i--) {
+    // compare it to each one of its next numbers
+    for (let j = i + 1; j < nums.length; j++) {
+      // if it's less than the next number, they are an increasing subsequence
+      if (nums[i] < nums[j]) {
+        // in that case, compare the current number's memoized max length of a subsequence with
+        // the next number's memoized max subsequence length + 1 (1 representing the current number)
+        // whichever's greater becomes the maxLength for the number at the [i]th index
+        maxLengthFor[i] = Math.max(maxLengthFor[j] + 1, maxLengthFor[i]);
       }
     }
-    // after comparing nums[i] to each of its preceding num in the array
-    // compare current max subsequence length to subsequence length at LIS[i]
-    // assign whichever's greater to max
-    max = Math.max(max, LIS[i]);
+    // if the max length of the subsequence including the current number is greater than the overall max
+    // update the max length
+    maxLength = Math.max(maxLength, maxLengthFor[i]);
   }
 
-  // return the longest subsequence length
-  return max;
-}
+  return maxLength;
+};
 
-// Time Complexity --- O(amount * coins.length)
-// Space Complexity --- O(amount)
+// Time Complexity --- O(n2)
+// Space Complexity --- O(n)
