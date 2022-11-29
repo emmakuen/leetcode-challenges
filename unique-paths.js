@@ -22,27 +22,75 @@ The test cases are generated so that the answer will be less than or equal to 2 
     1 <= m, n <= 100
 */
 
-function uniquePaths(m, n) {
-  // Make m x n matrix
-  const pathsMatrix = Array(m).fill(Array(n).fill(0));
-  // if there's only one row, there's only one unique path.
-  // Therefore, assign 1 to each item in the first row.
-  pathsMatrix[0] = Array(n).fill(1);
+/**
+ * @param {number} rowCount
+ * @param {number} columnCount
+ * @return {number}
+ */
+const uniquePaths = function (rowCount, columnCount) {
+  // if there's only one row or column, there would be only one path (going straight) to the destination
+  if (rowCount === 1 || columnCount === 1) return 1;
 
-  for (let row = 1; row < m; row++) {
-    // if there's only one column, there's one unique path.
-    // Therefore, assign 1 to first item of every row.
-    pathsMatrix[row][0] = 1;
-    for (let column = 1; column < n; column++) {
-      // Number of unique paths to any other cell is equal to
-      // number of paths of the cell above plus number of paths of the cell to its left
-      pathsMatrix[row][column] =
-        pathsMatrix[row - 1][column] + pathsMatrix[row][column - 1];
+  // create a grid excepting the last row and initially assign zero to each cell
+  // each cell in this grid represents the number of unique paths to reach the destination starting from that cell
+  const grid = Array(rowCount - 1).fill(Array(columnCount).fill(0));
+
+  // from each cell of the bottom row, there's only one path of reaching the destination (move to the right)
+  // so when adding the last row to the grid, assign one to each of its cells
+  grid.push(Array(columnCount).fill(1));
+
+  // from each cell of the last column, there's only one path of reaching the destination (move down everytime)
+  for (let row = 0; row < rowCount; row++) {
+    grid[row][columnCount - 1] = 1;
+  }
+
+  // for the remaining cells, iterate from the second last row & column
+  for (let row = rowCount - 2; row >= 0; row--) {
+    for (let column = columnCount - 2; column >= 0; column--) {
+      // from each of these cells, the number of ways of reaching the destination is equal to the sum of memoized values of its right cell and its bottom cell
+      grid[row][column] = grid[row + 1][column] + grid[row][column + 1];
     }
   }
 
-  return pathsMatrix[m - 1][n - 1];
-}
+  // after the loop, now we know the number of ways to reach the destination from the starting cell
+  // return that value
+  return grid[0][0];
+};
 
 // Time Complexity: O(n * m)
-// Space Complexity: O(n * m)  --- matrix size
+// Space Complexity: O(n * m)
+
+// ********************************************** //
+// ************* MORE EFFICIENT SOLUTION ******** //
+/**
+ * @param {number} rowCount
+ * @param {number} columnCount
+ * @return {number}
+ */
+const uniquePaths1 = (rowCount, columnCount) => {
+  // create the bottom row
+  // from each cell of the bottom row, there's only one unique path to reach the destination
+  let bottomRow = Array(columnCount).fill(1);
+
+  // for each of the remaining rows
+  for (let row = 0; row < rowCount - 1; row++) {
+    const currentRow = Array(columnCount);
+    // from each cell of the last column, there's only one unique path to reach the destination, so assign it 1
+    currentRow[columnCount - 1] = 1;
+
+    // for each of the remaining cells, their value is equal to the sum of the memoized values of their right cell and bottom cell
+    for (let column = columnCount - 2; column >= 0; column--) {
+      currentRow[column] = bottomRow[column] + currentRow[column + 1];
+    }
+    // after each iteration, we move up one row
+    // so the current row becomes the bottom row of its next row
+    bottomRow = currentRow;
+  }
+
+  // after the loop finishes, now we're at the top row
+  // so, we can return the number of unique paths from the starting cell as follows:
+  return bottomRow[0];
+};
+
+// Time Complexity: O(n * m)
+// Space Complexity: O(n)  --- row size
