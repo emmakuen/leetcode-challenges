@@ -69,13 +69,13 @@ const uniquePaths = function (rowCount, columnCount) {
  */
 const uniquePaths1 = (rowCount, columnCount) => {
   // create the bottom row
-  // from each cell of the bottom row, there's only one unique path to reach the destination
+  // from each cell of the bottom row, there's only one unique path to reach the destination (we can only move to the right)
   let bottomRow = Array(columnCount).fill(1);
 
   // for each of the remaining rows
   for (let row = 0; row < rowCount - 1; row++) {
     const currentRow = Array(columnCount);
-    // from each cell of the last column, there's only one unique path to reach the destination, so assign it 1
+    // from each cell of the last column, there's only one unique path to reach the destination (we can only move down), so assign them 1
     currentRow[columnCount - 1] = 1;
 
     // for each of the remaining cells, their value is equal to the sum of the memoized values of their right cell and bottom cell
