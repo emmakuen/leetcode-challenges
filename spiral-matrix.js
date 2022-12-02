@@ -26,8 +26,6 @@ const spiralOrder = function (matrix) {
   let topRow = 0;
   let bottomRow = matrix.length - 1;
 
-  if (matrix[0].length === 1) return matrix.flat();
-
   while (leftColumn <= rightColumn && topRow <= bottomRow) {
     // add every element in the top row and move the pointer down to avoid double counting
     for (let column = leftColumn; column <= rightColumn; column++) {
