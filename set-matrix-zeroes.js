@@ -21,70 +21,66 @@
 // A simple improvement uses O(m + n) space, but still not the best solution.
 // Could you devise a constant space solution?
 
-function setZeroes(matrix) {
-  let firstRowHasZero = false;
-  let firstColHasZero = false;
-
-  for (let row = 0; row < matrix.length; row++) {
-    // if any of the values in the first column is zero
-    // set firstColHasZero to true and break the loop
-    if (matrix[row][0] === 0) {
-      firstColHasZero = true;
+/**
+ * @param {number[][]} matrix
+ * @return {void} Do not return anything, modify matrix in-place instead.
+ */
+const setZeroes = function (matrix) {
+  // if any of the cells in the top row is zero, set topRowHasZero to true
+  let topRowHasZero = false;
+  for (const cell of matrix[0]) {
+    if (cell === 0) {
+      topRowHasZero = true;
       break;
     }
   }
 
-  for (let col = 0; col < matrix[0].length; col++) {
-    // if any of the values in the first row is zero
-    // set firstRowHasZero to true and break the loop
-    if (matrix[0][col] === 0) {
-      firstRowHasZero = true;
+  // if any of the cells in the left column is zero, set leftColumnHasZero to true
+  let leftColumnHasZero = false;
+  for (let row of matrix) {
+    if (row[0] === 0) {
+      leftColumnHasZero = true;
       break;
     }
   }
 
-  // use first row and column as flags to indicate
-  // that the rest of cells have zeroes
+  // if any cell excluding those in the left column and top row is zero,
+  // set the first cells of the corresponding row and column zero
+  // this marks which row and column should be set to zero
   for (let row = 1; row < matrix.length; row++) {
-    for (let col = 1; col < matrix[0].length; col++) {
-      // if any of the cells is zero
-      // set the first cells of the corresponding column and
-      // row to zero
-      if (matrix[row][col] === 0) {
-        matrix[0][col] = 0;
+    for (let column = 1; column < matrix[0].length; column++) {
+      if (matrix[row][column] === 0) {
+        matrix[0][column] = 0;
         matrix[row][0] = 0;
       }
     }
   }
 
+  // if any cell in the top row or in the left column is zero, set the cells in that row/column zero
   for (let row = 1; row < matrix.length; row++) {
-    for (let col = 1; col < matrix[0].length; col++) {
-      // if first cell of corresponding column or row is zero
-      // set the entire column or row to zero
-      if (matrix[0][col] === 0 || matrix[row][0] === 0) {
-        matrix[row][col] = 0;
+    for (let column = 1; column < matrix[0].length; column++) {
+      if (matrix[row][0] === 0 || matrix[0][column] === 0) {
+        matrix[row][column] = 0;
       }
     }
   }
 
-  if (firstColHasZero) {
-    // if first column had zero in the first place,
-    // set all cells in the first column to zero
-    for (let row = 0; row < matrix.length; row++) {
-      matrix[row][0] = 0;
-    }
-  }
-  if (firstRowHasZero) {
-    // if first row had zero in the first place,
-    // set all cells in the first row to zero
-    for (let col = 0; col < matrix[0].length; col++) {
-      matrix[0][col] = 0;
+  // if top row had zeroes before it was modified, set all the cells in that row zero
+  if (topRowHasZero) {
+    for (let column = 0; column < matrix[0].length; column++) {
+      matrix[0][column] = 0;
     }
   }
 
-  // return the updated matrix
+  // if left column had any zeroes before it was modified, set all the cells in that column zero
+  if (leftColumnHasZero) {
+    for (const row of matrix) {
+      row[0] = 0;
+    }
+  }
+
   return matrix;
-}
+};
 
 // Time Complexity O(nm)
 // Space Complexity O(1)
