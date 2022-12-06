@@ -20,7 +20,7 @@ const containsDuplicate = (nums) => {
     // if the current number has already appeared before, there's a duplicate
     if (appeared.has(num)) return true;
 
-    // else, add that number in the set
+    // else, add that number to the set
     appeared.add(num);
   }
 
