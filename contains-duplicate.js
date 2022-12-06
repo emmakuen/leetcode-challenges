@@ -13,23 +13,18 @@
  */
 
 const containsDuplicate = (nums) => {
-  // create an object to keep track of numbers that have appeared so far
-  const appeared = {};
-  // for each number in the array
-  for (let num of nums) {
-    // if it's the first time num appears,
-    if (!appeared[num]) {
-      // add it to the object
-      appeared[num] = true;
-    } else {
-      // else, it has a duplicate value;
-      // therefore, return true
-      return true;
-    }
+  // memoize numbers that have appeared
+  const appeared = new Set();
+
+  for (const num of nums) {
+    // if the current number has already appeared before, there's a duplicate
+    if (appeared.has(num)) return true;
+
+    // else, add that number in the set
+    appeared.add(num);
   }
 
-  // if the loop finishes without returning true, it has no duplicate
-  // so, return false
+  // if no number has appeared twice, there's no duplicate
   return false;
 };
 
