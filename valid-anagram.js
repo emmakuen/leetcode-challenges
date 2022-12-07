@@ -11,25 +11,28 @@
 // s = "anagram", t = "nagaram" ==> true
 // s = "rat", t = "car" ==> false
 
-function isAnagram(s, t) {
-  if (s.length !== t.length) return false; // if lengths don't match, they're not anagrams
-  if (s === t) return true; // if they're the same strings, they're anagrams
+/**
+ * @param {string} firstStr
+ * @param {string} secondStr
+ * @return {boolean}
+ */
+var isAnagram = function (firstStr, secondStr) {
+  if (firstStr.length !== secondStr.length) return false;
 
-  const charMap = {};
-
-  // map all characters of s string
-  for (let i = 0; i < s.length; i++) {
-    const currentChar = s[i];
-    charMap[currentChar] = charMap[currentChar] + 1 || 1; // count all the occurances of the char
+  const charFrequency = {};
+  // count the frequency of each character in the first string
+  for (const char of firstStr) {
+    charFrequency[char] = charFrequency[char] + 1 || 1;
   }
 
-  // check the same number of each character of t string exists in s string
-  for (let i = 0; i < t.length; i++) {
-    const currentChar = t[i];
-    // if current character is not in the s string, they're not anagrams
-    if (!charMap[currentChar] || charMap[currentChar] < 0) return false;
-    charMap[currentChar]--;
+  for (const char of secondStr) {
+    // if the current character doesn't exist in the first string or if it appears more frequently in the second string, return false
+    if (!(char in charFrequency) || charFrequency[char] <= 0) return false;
+
+    // if the character exists in the first string, decrement its count
+    charFrequency[char]--;
   }
 
+  // if all characters match, return true
   return true;
-}
+};
