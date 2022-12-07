@@ -29,7 +29,7 @@ var isAnagram = function (firstStr, secondStr) {
     // if the current character doesn't exist in the first string or if it appears more frequently in the second string, return false
     if (!(char in charFrequency) || charFrequency[char] <= 0) return false;
 
-    // if the character exists in the first string, decrement its count
+    // decrement the character count
     charFrequency[char]--;
   }
 
