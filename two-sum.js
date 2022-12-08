@@ -15,23 +15,24 @@
 // -109 <= target <= 109
 // Only one valid answer exists.
 
-function twoSum(arr, target) {
-  let visited = {};
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+const twoSum = function (nums, target) {
+  const indexOfAddendFor = {};
 
-  // for each number in the list
-  for (let i = 0; i < arr.length; i++) {
-    const num = arr[i];
-    // find the addent that produces the target sum
-    const addent = target - num;
+  for (let i = 0; i < nums.length; i++) {
+    const num = nums[i];
 
-    // if the addent has been visited
-    if (addent in visited) {
-      // make a list of the current index and the addent index
-      // stop the loop and return the list
-      return [i, visited[addent]];
-    }
-    // if the addent has not been visited, the answer is yet to be found
-    // so, store the current number and its index in the visited object
-    visited[num] = i;
+    // if current number's addend exists,
+    // return the index of the current number and the index of the addend
+    if (num in indexOfAddendFor) return [i, indexOfAddendFor[num]];
+
+    // else, store the current number's index at the key of its addend that would make the target sum
+    indexOfAddendFor[target - num] = i;
   }
-}
+
+  return [];
+};
