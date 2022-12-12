@@ -25,22 +25,24 @@
 // Input: prices = [7,6,4,3,1]
 // Output: 0
 // Explanation: In this case, no transactions are done and the max profit = 0.
+/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+const maxProfit = function (prices) {
+  let buyingPrice = prices[0];
+  let maximumProfit = 0;
 
-var maxProfit = function (prices) {
-  // track minimum price and max profit with the following two variables
-  let minPrice = prices[0];
-  let profit = 0;
+  for (const sellingPrice of prices) {
+    // buy it as cheap as possible to realize a greater profit
+    buyingPrice = Math.min(sellingPrice, buyingPrice);
 
-  for (let currentPrice of prices) {
-    // if current price is cheaper than min, assign the value to min price
-    minPrice = Math.min(currentPrice, minPrice);
-    // if the difference between min price and current price is bigger than
-    // previous max profit, make it the new max profit
-    profit = Math.max(profit, currentPrice - minPrice);
+    // update max profit if the current profit is greater
+    maximumProfit = Math.max(maximumProfit, sellingPrice - buyingPrice);
   }
 
   // return the max profit
-  return profit;
+  return maximumProfit;
 };
 
 // Time Complexity: O(n)
