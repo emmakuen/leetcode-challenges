@@ -25,8 +25,3 @@ const search = function (nums, target) {
   // if target hasn't been found, return -1
   return -1;
 };
-
-// console.log("result", search([5], 5));
-// console.log("result", search([-1, 0, 3, 5, 9, 12], 9));
-console.log("result", search([-1, 0, 3, 5, 9, 12], 2));
-console.log("result", search([-1, 0, 3, 5, 9, 12], 2));
