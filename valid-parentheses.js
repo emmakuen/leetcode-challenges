@@ -17,34 +17,35 @@
 // 1 <= s.length <= 104
 // s consists of parentheses only '()[]{}'
 
-const isValid = (s) => {
-  // if there are odd number of brackets, return false
-  if (s.length % 2 === 1) return false;
-
-  // create map of opening & closing bracket pairs. Opening brackets are keys & closing ones are values.
-  const pairs = {
+/**
+ * @param {string} brackets
+ * @return {boolean}
+ */
+var isValid = function (brackets) {
+  const closingBracketFor = {
     "(": ")",
     "{": "}",
     "[": "]",
   };
 
-  // initialize a stack to keep track of opening brackets & pop if they're closed in the correct order
-  const stack = [];
+  // create a stack to keep track of opening brackets and pop them to check if they're closed in the correct order
+  const openingBrackets = [];
 
-  for (let i = 0; i < s.length; i++) {
-    let char = s[i];
-
-    // if current char is an opening bracket, add it to the stack
-    if (char in pairs) {
-      stack.push(char);
-
-      // else if current char is not the closing bracket of the last char on the stack,
-      // it's not correctly closed. Therefore, return false.
-    } else if (pairs[stack.pop()] !== char) {
+  for (const bracket of brackets) {
+    // if the current bracket is an opening bracket, push it to the stack
+    if (bracket in closingBracketFor) {
+      openingBrackets.push(bracket);
+      // else if, the current bracket is not the closing bracket for the most recent opening bracket,
+      // it's not closed in the correct order,
+      // so return false
+    } else if (closingBracketFor[openingBrackets.pop()] !== bracket) {
       return false;
     }
+
+    // else, the bracket is closed in the correct order, so continue the loop
   }
 
-  // if the stack is empty, all brackets are correctly closed ==> return true. Else, return false.
-  return stack.length === 0;
+  // if all opening brackets are popped off the stack and closed in the correct order, return true
+  // if there are still some opening brackets remaining, return false
+  return openingBrackets.length === 0;
 };
