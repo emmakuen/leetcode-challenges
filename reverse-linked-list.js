@@ -20,6 +20,17 @@
 // or recursively. Could you implement both?
 
 // RECURSIVE
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
 const reverseListRecursively = (head) => {
   // Base case 1 => if there's no linked list,
   // break the recursion and return null
@@ -48,28 +59,34 @@ const reverseListRecursively = (head) => {
 };
 
 // ITERATIVE
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
 const reverseList = (head) => {
   // initialize two pointers and
   // assign head node to current node variable
-  let previousNode = null;
+  // when we reverse the list, the first node becomes the last node and it should point to null
+  // so, assign null to previous node variable
   let currentNode = head;
+  let previousNode = null;
 
   // while current node is not null
   while (currentNode) {
-    // store the current node's linked node to a variable
-    const next = currentNode.next;
+    // store the current node's next node to a variable
+    const nextNode = currentNode.next;
     // break the link and point it to its previous node
     currentNode.next = previousNode;
 
-    // move both pointer variables up
+    // move on to the next node
+    // now current node becomes the previous node
+    // and next node becomes the current node
     previousNode = currentNode;
-    currentNode = next;
+    currentNode = nextNode;
   }
 
   // when current node equals null, the loop breaks
-  // and reversed linked list will be stored in the previousNode variable
-  // therefore, return the previousNode variable
+  // and reversed linked list will be stored in the previousNode
+  // therefore, return the value of previousNode
   return previousNode;
 };
-
-module.exports = reverseList;
