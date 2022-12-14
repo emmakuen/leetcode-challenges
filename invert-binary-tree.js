@@ -15,25 +15,19 @@
 // [0, 100].
 // -100 <= Node.val <= 100
 
-function invertTree(root) {
-  // recursively invert nodes
-  invertRecursively(root);
-  // return the inverted tree
-  return root;
+/**
+ * @param {TreeNode} root
+ * @return {TreeNode}
+ */
+var invertTree = function (root) {
+  if (!root) return root;
 
-  // define a helper function that would swap
-  // left and right node values recursively
-  function invertRecursively(node) {
-    // if nodes are exhausted, finish recursion
-    if (!node) return;
-    // else, save left value to a temp variable
-    const temp = node.left;
-    // and swap left and right node values
-    node.left = node.right;
-    node.right = temp;
-    // call this function recursively
-    // on left and right nodes
-    invertRecursively(node.left);
-    invertRecursively(node.right);
-  }
-}
+  const leftNode = root.left;
+  root.left = root.right;
+  root.right = leftNode;
+
+  invertTree(root.left);
+  invertTree(root.right);
+
+  return root;
+};
