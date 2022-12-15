@@ -16,33 +16,25 @@
 // -100 <= Node.val <= 100
 
 // FIRST SOLUTION
-function maxDepth1(root) {
-  // define a depth first search function
-  const dfs = (node, depth) => {
-    // if nodes are exhausted,
-    if (!node) {
-      // update max depth if current depth is greater
-      maxDepth = Math.max(depth, maxDepth);
-      // stop the recursion
-      return;
-    } else {
-      // else, call the function on right and left nodes recursively
-      // depth will accumulate over each recursion
-      // and eventually update max depth if it's greater
-      dfs(node.right, depth + 1);
-      dfs(node.left, depth + 1);
-    }
-  };
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var maxDepth = function (root) {
+  function dfs(node, depth) {
+    // if there's no more node to traverse, return the current depth
+    if (!node) return depth;
 
-  // initialize a variable to keep track of max depth
-  let maxDepth = 0;
-  // call the depth first function on tree root
-  // depth is initially set to zero
-  dfs(root, 0);
+    // else, find the depth of left and right nodes by calling the dfs recursively
+    // increase depth by one to indicate we're going one level deeper
+    const leftDepth = dfs(node.left, depth + 1);
+    const rightDepth = dfs(node.right, depth + 1);
+    // return whichever's greater as current node's depth
+    return Math.max(leftDepth, rightDepth);
+  }
 
-  // after the recursive function finishes, return max depth
-  return maxDepth;
-}
+  return dfs(root, 0);
+};
 
 // SECOND SOLUTION
 function maxDepth(root) {
