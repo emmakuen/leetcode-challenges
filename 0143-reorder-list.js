@@ -11,22 +11,25 @@
  */
 var reorderList = function (head) {
   // find the start of second half of the list
-  let endOfFirstHalf = head;
-  let endOfList = head?.next;
+  let tailOfFirstHalf = head;
+  let tail = head?.next;
 
-  while (endOfList?.next) {
-    endOfFirstHalf = endOfFirstHalf.next;
-    endOfList = endOfList.next.next;
+  while (tail?.next) {
+    // when the fast pointer reaches the tail, slow pointer would point at the tail of the first half
+    tailOfFirstHalf = tailOfFirstHalf.next;
+    tail = tail.next.next;
   }
 
-  let headOfSecondHalf = reverse(endOfFirstHalf.next);
-  endOfFirstHalf.next = null;
+  let headOfSecondHalf = reverse(tailOfFirstHalf.next);
+  tailOfFirstHalf.next = null;
 
   while (head && headOfSecondHalf) {
+    // reorder by mixing head and tail nodes
     const headNext = head.next;
     head.next = headOfSecondHalf;
     const headOfSecondHalfNext = headOfSecondHalf.next;
     headOfSecondHalf.next = headNext;
+    // update the pointers
     head = headNext;
     headOfSecondHalf = headOfSecondHalfNext;
   }
