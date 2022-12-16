@@ -10,21 +10,26 @@
  * @return {void} Do not return anything, modify head in-place instead.
  */
 var reorderList = function (head) {
-  const dummyHead = { next: null };
-  let current = dummyHead;
-  const endOfFirstHalf = findEndOfFirstHalf(head);
+  // find the start of second half of the list
+  let endOfFirstHalf = head;
+  let endOfList = head?.next;
+
+  while (endOfList?.next) {
+    endOfFirstHalf = endOfFirstHalf.next;
+    endOfList = endOfList.next.next;
+  }
+
   let headOfSecondHalf = reverse(endOfFirstHalf.next);
   endOfFirstHalf.next = null;
 
   while (head && headOfSecondHalf) {
-    current.next = head;
-    head = head.next;
-    current.next.next = headOfSecondHalf;
-    headOfSecondHalf = headOfSecondHalf.next;
-    current = current.next.next;
+    const headNext = head.next;
+    head.next = headOfSecondHalf;
+    const headOfSecondHalfNext = headOfSecondHalf.next;
+    headOfSecondHalf.next = headNext;
+    head = headNext;
+    headOfSecondHalf = headOfSecondHalfNext;
   }
-
-  current.next = head || headOfSecondHalf;
 
   function reverse(head) {
     let previous = null;
@@ -37,17 +42,5 @@ var reorderList = function (head) {
     }
 
     return previous;
-  }
-
-  function findEndOfFirstHalf(head) {
-    let endOfFirstHalf = head;
-    let endOfList = head && head.next;
-
-    while (endOfList?.next) {
-      endOfFirstHalf = endOfFirstHalf.next;
-      endOfList = endOfList.next.next;
-    }
-
-    return endOfFirstHalf;
   }
 };
