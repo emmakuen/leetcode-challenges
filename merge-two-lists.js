@@ -21,37 +21,47 @@
 // The number of nodes in both lists is in the range [0, 50].
 // -100 <= Node.val <= 100
 // Both list1 and list2 are sorted in non-decreasing order.
-function mergeTwoLists(l1, l2) {
-  // Create a dummy head to handle edge cases
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} list1
+ * @param {ListNode} list2
+ * @return {ListNode}
+ */
+var mergeTwoLists = function (list1, list2) {
+  // create a dummy head to handle edge cases
   const dummyHead = { next: null };
-  // Initialize a current variable to track the current node
-  // and assign the dummy head to it
-  let current = dummyHead;
+  // create a current node and assign dummy head to it initially
+  let currentNode = dummyHead;
 
   // while both lists are not exhausted
-  while (l1 && l2) {
-    // if l1 node's value is smaller
-    if (l1.val < l2.val) {
-      // point current node's next pointer to it
-      current.next = l1;
-      // move the current pointer up
-      current = current.next;
-      // move the l1 pointer up to its next node
-      l1 = l1.next;
+  while (list1 && list2) {
+    // if the list1's value is smaller
+    if (list1.val < list2.val) {
+      // link the current node to it
+      currentNode.next = list1;
+      // and move the list1 pointer to the next node
+      list1 = list1.next;
     } else {
-      // if l2 node's value is smaller,
-      // point current node's next pointer to l2 node
-      current.next = l2;
-      // move the current pointer up
-      current = current.next;
-      // move the l2 pointer up to its next node
-      l2 = l2.next;
+      // else, link the current node to list2
+      currentNode.next = list2;
+      // and move the list2 pointer to the next node
+      list2 = list2.next;
     }
+    // move the currentNode pointer to its next node
+    currentNode = currentNode.next;
   }
 
-  // when the loop finishes, connect the merged list to
-  // whichever list that has remaining nodes
-  current.next = l1 || l2;
+  // when the loop breaks, one of the lists can have remaining nodes
+  // link the current node to the nodes of the non-exhausted list
+  currentNode.next = list1 || list2;
+
   // return the merged list
   return dummyHead.next;
-}
+};
