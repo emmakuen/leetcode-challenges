@@ -21,22 +21,21 @@
  */
 const groupAnagrams = (strs) => {
   const anagramMap = {};
-  const aCharCode = "a".charCodeAt(0);
+  const charcodeForA = "a".charCodeAt(0);
 
-  for (let strIndex = 0; strIndex < strs.length; strIndex++) {
-    const charCounts = Array(26).fill(0);
-    const str = strs[strIndex];
+  for (const str of strs) {
+    const charCount = Array(26).fill(0);
 
-    for (let charIndex = 0; charIndex < str.length; charIndex++) {
-      const charCountsIndex = str.charCodeAt(charIndex) - aCharCode;
-      charCounts[charCountsIndex]++;
+    for (let i = 0; i < str.length; i++) {
+      const countIndex = str.charCodeAt(i) - charcodeForA;
+      charCount[countIndex]++;
     }
 
-    const mapKey = charCounts.toString();
-    if (mapKey in anagramMap) {
-      anagramMap[mapKey].push(str);
+    const anagramKey = charCount.join(",");
+    if (anagramKey in anagramMap) {
+      anagramMap[anagramKey].push(str);
     } else {
-      anagramMap[mapKey] = [str];
+      anagramMap[anagramKey] = [str];
     }
   }
 
