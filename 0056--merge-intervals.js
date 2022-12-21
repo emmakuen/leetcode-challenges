@@ -32,7 +32,7 @@ const merge = (intervals) => {
   // initialize a new array to keep track of non-overlapping intervals
   const merged = [intervals[0]];
 
-  for (let i = 0; i < intervals.length; i++) {
+  for (let i = 1; i < intervals.length; i++) {
     const currentInterval = intervals[i];
     const lastMergedInterval = merged[merged.length - 1];
     // if current interval's starting value is greater than
