@@ -13,22 +13,39 @@
 // k is in the range [1, the number of unique elements in the array].
 // It is guaranteed that the answer is unique.
 
-const topKFrequent = function (nums, k) {
-  const frequencyMap = {};
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number[]}
+ */
+var topKFrequent = function (nums, k) {
+  const frequencyFor = {};
 
-  for (let i = 0; i < nums.length; i++) {
-    const num = nums[i];
+  for (const num of nums) {
+    frequencyFor[num] = frequencyFor[num] + 1 || 1;
+  }
 
-    if (num in frequencyMap) {
-      frequencyMap[num]++;
+  const frequencyBuckets = Array(nums.length);
+
+  for (const [num, frequency] of Object.entries(frequencyFor)) {
+    const parsedNum = parseInt(num);
+    if (frequency in frequencyBuckets) {
+      frequencyBuckets[frequency].push(parsedNum);
     } else {
-      frequencyMap[num] = 1;
+      frequencyBuckets[frequency] = [parsedNum];
     }
   }
 
-  const mostFrequentElements = Object.keys(frequencyMap).sort(
-    (a, b) => frequencyMap[b] - frequencyMap[a]
-  );
+  const topFrequentNums = [];
+  for (
+    let i = frequencyBuckets.length - 1;
+    i >= 0 && topFrequentNums.length < k;
+    i--
+  ) {
+    if (frequencyBuckets[i]) {
+      topFrequentNums.push(...frequencyBuckets[i]);
+    }
+  }
 
-  return mostFrequentElements.slice(0, k);
+  return topFrequentNums;
 };
