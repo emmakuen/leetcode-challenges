@@ -31,21 +31,26 @@ var diameterOfBinaryTree = function (root) {
   // max diameter is initially zero
   let maxDiameter = 0;
 
-  function findDiameter(root) {
-    // if the root is
-    if (!root) return 0;
+  function getHeight(node) {
+    // if there's no node, the height would be zero
+    if (!node) return 0;
 
-    const leftDiameter = findDiameter(root.left);
-    const rightDiameter = findDiameter(root.right);
+    // else, find the heights of its left and right nodes
+    const leftHeight = getHeight(node.left);
+    const rightHeight = getHeight(node.right);
 
-    const height = 1 + Math.max(leftDiameter, rightDiameter);
-    const diameter = leftDiameter + rightDiameter;
+    // current node's height is equal to the max of its left and right children's heights plus one (one represents the current node)
+    const height = 1 + Math.max(leftHeight, rightHeight);
+    // current node's diameter would be equal to the sum of its left and right children's heights
+    const diameter = leftHeight + rightHeight;
+    // if it's greater than the maximum diameter, update the max
     maxDiameter = Math.max(diameter, maxDiameter);
 
+    // return the current node's height
     return height;
   }
 
-  findDiameter(root);
+  getHeight(root);
 
   return maxDiameter;
 };
