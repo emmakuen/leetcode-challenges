@@ -20,36 +20,31 @@ You must write an algorithm that runs in O(n) time and without using the divisio
     Follow up: Can you solve the problem in O(1) extra space complexity? (The output array does not count as extra space for space complexity analysis.)
  */
 
-const productExceptSelf = (nums) => {
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+const productExceptSelf = function (nums) {
   // initialize an array to keep track of products
-  let output = Array(nums.length).fill(1);
-  // initialize a variable that keeps track of the product
-  let product = 1;
+  const products = Array(nums.length).fill(1);
 
-  // multiply from left to right
-  for (let i = 0; i < nums.length; i++) {
-    // product is initially 1 but then takes the value to the left of current num (nums[i])
-    // multiply product with 1 in the output array
-    // the output will be array of products produced from multiplying nums one by one
-    // from left to right
-    output[i] = output[i] * product;
-    product = product * nums[i];
+  // for each number, find the product of all the numbers on its left
+  for (let i = 1; i < nums.length; i++) {
+    // products[i - 1] is the product of nums[0] to nums[i - 2]
+    // if we multiply it by nums[i - 1], we get the product of all the numbers on the left of nums[i]
+    products[i] = products[i - 1] * nums[i - 1];
   }
 
-  // reset product variable to 1
-  product = 1;
+  let rightNumsProduct = 1;
 
-  // multiply from right to left
-  for (let j = nums.length - 1; j >= 0; j--) {
-    // product is initially 1 but then takes the value to the right of current num (nums[i])
-    // now output[j] holds the multiplication of nums to the left of the current number (nums[i])
-    // multiply it with product and assign it to output[j]
-    output[j] = output[j] * product;
-    product = product * nums[j];
+  // for each number, find the product of all the numbers on its right
+  // multiply the product of left nums and right nums to find the product except the number itself
+  for (let i = nums.length - 1; i >= 0; i--) {
+    products[i] = products[i] * rightNumsProduct;
+    rightNumsProduct *= nums[i];
   }
 
-  // return the output array
-  return output;
+  return products;
 };
 
 // Time complexity = O(n)
