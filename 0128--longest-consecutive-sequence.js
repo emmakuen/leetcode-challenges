@@ -16,26 +16,27 @@
 // 0 <= nums.length <= 105
 // -109 <= nums[i] <= 109
 
-const longestConsecutive = (nums) => {
-  if (nums.length === 0) return 0;
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+const longestConsecutive = function (nums) {
+  const numsSet = new Set(nums);
 
-  const numSet = new Set(nums);
-  let maxLength = 1;
-
-  for (const num of numSet) {
-    // if it's the beginning of the consecutive numbers, start the count
-    if (!numSet.has(num - 1)) {
-      let length = 1;
-      while (numSet.has(num + length)) {
+  let maxLength = 0;
+  for (const num of nums) {
+    let length = 0;
+    // if the current number is the start of a sequence
+    if (!numsSet.has(num - 1)) {
+      // find the length of the sequence
+      while (numsSet.has(num + length)) {
         length++;
       }
 
+      // update maxLength if the current sequence is greater in length
       maxLength = Math.max(maxLength, length);
     }
   }
 
   return maxLength;
 };
-
-console.log(longestConsecutive([0, 3, 7, 2, 5, 8, 4, 6, 0, 1]));
-console.log(longestConsecutive([100, 4, 200, 1, 3, 2]));
