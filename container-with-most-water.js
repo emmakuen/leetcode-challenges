@@ -12,29 +12,21 @@
 // Input: height = [1,1]
 // Output: 1
 
-function maxArea(height) {
-  let maxArea = 0;
-  // initialize right, left pointers to keep track of the gap between them for area calculation
-  let rightPointer = height.length - 1;
-  let leftPointer = 0;
+/**
+ * @param {number[]} height
+ * @return {number}
+ */
+const maxArea = function (height) {
+  let left = 0;
+  let right = height.length - 1;
+  let max = 0;
 
-  // while there's gap (if there's no gap, they can't contain water)
-  while (rightPointer - leftPointer > 0) {
-    // find the minimum of two heights, because water can be held to that point
-    // multiply it with the gap size
-    const currentArea =
-      Math.min(height[leftPointer], height[rightPointer]) *
-      (rightPointer - leftPointer);
+  while (left < right) {
+    const area = Math.min(height[left], height[right]) * (right - left);
+    max = Math.max(max, area);
 
-    // replace max area if current area is bigger
-    maxArea = Math.max(currentArea, maxArea);
-
-    // to find the max area, bigger value should be kept
-    // if value of left pointer is bigger, decrement right pointer
-    // if value of right pointer is bigger, increment left pointer
-    height[leftPointer] > height[rightPointer] ? rightPointer-- : leftPointer++;
+    height[left] > height[right] ? right-- : left++;
   }
 
-  // return the max area
-  return maxArea;
-}
+  return max;
+};
