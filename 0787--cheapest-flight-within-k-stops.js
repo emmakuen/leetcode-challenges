@@ -53,7 +53,7 @@ const findCheapestPrice = function (n, flights, src, dst, k) {
     const nextPriceTo = [...currentPriceTo];
 
     for (const [srcCity, dstCity, price] of flights) {
-      if (nextPriceTo[srcCity] === Infinity) continue;
+      if (currentPriceTo[srcCity] === Infinity) continue;
 
       const nextPrice = currentPriceTo[srcCity] + price;
       if (nextPrice < nextPriceTo[dstCity]) {
