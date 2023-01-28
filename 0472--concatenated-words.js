@@ -34,10 +34,13 @@ const findAllConcatenatedWordsInADict = function (words) {
 
     for (let endIndex = 1; endIndex <= word.length; endIndex++) {
       for (
-        let startIndex = endIndex === word.length ? 1 : 0;
+        let startIndex = 0;
         !dp[endIndex] && startIndex < endIndex;
         startIndex++
       ) {
+        // to avoid comparing the word to itself, skip the iteration if start === 0 && end === word.length
+        if (startIndex === 0 && endIndex === word.length) continue;
+
         dp[endIndex] =
           dp[startIndex] && dictionary.has(word.slice(startIndex, endIndex));
       }
@@ -46,4 +49,34 @@ const findAllConcatenatedWordsInADict = function (words) {
     if (dp[word.length]) concatenatedWords.push(word);
   }
   return concatenatedWords;
+};
+
+/**
+ * @param {string[]} words
+ * @return {string[]}
+ */
+const findAllConcatenatedWordsInADictDFS = (words) => {
+  const dictionary = new Set(words);
+  const concatenatedWords = [];
+
+  for (const word of words) {
+    if (isConcat(word)) concatenatedWords.push(word);
+  }
+
+  return concatenatedWords;
+
+  function isConcat(word) {
+    for (let i = 1; i < word.length; i++) {
+      const prefix = word.slice(0, i);
+      const suffix = word.slice(i);
+
+      if (
+        dictionary.has(prefix) &&
+        (dictionary.has(suffix) || isConcat(suffix))
+      )
+        return true;
+    }
+
+    return false;
+  }
 };
