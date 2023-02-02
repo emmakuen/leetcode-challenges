@@ -48,7 +48,8 @@ var isAlienSorted = function (words, order) {
     ) {
       const leftCharOrder = orderOf[leftWord[charIndex]];
       const rightCharOrder = orderOf[rightWord[charIndex]];
-      // if the left character appears before the right character,
+      // if the left word's current character appears
+      // before the right word's current char in the alphabet,
       // they're ordered correctly
       if (leftCharOrder < rightCharOrder) {
         isOrdered = true;
@@ -58,7 +59,7 @@ var isAlienSorted = function (words, order) {
       if (leftCharOrder > rightCharOrder) return false;
     }
 
-    // if all chars match, but the first word is shorter, they're ordered incorrectly
+    // if all chars match, but the left word is shorter, they're ordered incorrectly
     // therefore, return false
     if (!isOrdered && leftWord.length > rightWord.length) return false;
   }
