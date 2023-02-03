@@ -14,128 +14,56 @@
 
 const CHARCODE_A = 97;
 
-function matches(arr1, arr2) {
-  for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i] !== arr2[i]) return false;
-  }
-  return true;
-}
-
-/**
- * @param {string} s1
- * @param {string} s2
- * @return {boolean}
- */
-const checkInclusionArr = function (s1, s2) {
-  if (s1.length > s2.length) return false;
-
-  const s1Chars = Array(26).fill(0);
-
-  for (let i = 0; i < s1.length; i++) {
-    s1Chars[s1.charCodeAt(i) - CHARCODE_A]++;
-  }
-
-  for (let i = 0; i <= s2.length - s1.length; i++) {
-    const s2Chars = Array(26).fill(0);
-    for (let j = i; j < i + s1.length; j++) {
-      s2Chars[s2.charCodeAt(j) - CHARCODE_A]++;
-    }
-
-    if (matches(s1Chars, s2Chars)) return true;
-  }
-
-  return false;
-};
-
-/**
- * @param {string} s1
- * @param {string} s2
- * @return {boolean}
- */
-const checkInclusionSlidingWindow = function (s1, s2) {
-  if (s1.length > s2.length) return false;
-
-  const s1Chars = Array(26).fill(0);
-  const s2Chars = Array(26).fill(0);
-
-  for (let i = 0; i < s1.length; i++) {
-    s1Chars[s1.charCodeAt(i) - CHARCODE_A]++;
-    s2Chars[s2.charCodeAt(i) - CHARCODE_A]++;
-  }
-
-  for (let i = 0; i < s2.length - s1.length + 1; i++) {
-    if (matches(s1Chars, s2Chars)) return true;
-
-    s2Chars[s2.charCodeAt(i) - CHARCODE_A]--;
-    s2Chars[s2.charCodeAt(s1.length + i) - CHARCODE_A]++;
-  }
-
-  return false;
-};
-
-/**
- * @param {string} s1
- * @param {string} s2
- * @return {boolean}
- */
 const checkInclusion = function (s1, s2) {
-  // if the second string is shorter than the first string, it can't contain the permutation of the first string
-  // so, return false
   if (s1.length > s2.length) return false;
 
-  // each word contains lowercase english letters; we can count their frequency using an array with the length of 26
-  const s1Chars = Array(26).fill(0);
-  const s2Chars = Array(26).fill(0);
-  let matchedCharsCount = 0;
+  const charFrequency = Array(26).fill(0);
+  const charFrequency2 = Array(26).fill(0);
+  let matchCount = 0;
 
-  // count all the characters of the first string
-  // and count the same number of characters of the second string
   for (let i = 0; i < s1.length; i++) {
-    s1Chars[s1.charCodeAt(i) - CHARCODE_A]++;
-    s2Chars[s2.charCodeAt(i) - CHARCODE_A]++;
+    charFrequency[s1.charCodeAt(i) - CHARCODE_A]++;
+    charFrequency2[s2.charCodeAt(i) - CHARCODE_A]++;
   }
 
-  // iterate over each character count of the first string
-  for (let i = 0; i < s1Chars.length; i++) {
-    // if the character appears the same number of times in the second string,
-    // increment the matched chars count
-    if (s1Chars[i] === s2Chars[i]) {
-      matchedCharsCount++;
+  for (let i = 0; i < charFrequency.length; i++) {
+    if (charFrequency[i] === charFrequency2[i]) {
+      matchCount++;
     }
   }
 
-  for (let i = 0; i < s2.length - s1.length + 1; i++) {
-    // if all the characters appear the same number of times,
-    // it means the second string contains the permutation of the first string
-    // so, return true
-    if (matchedCharsCount === 26) return true;
+  for (let i = s1.length; i < s2.length; i++) {
+    if (matchCount === 26) return true;
 
-    // else, remove the preceding character and add the succeeding character from the second string to create a new substring
-    let charRemoved = s2.charCodeAt(i) - CHARCODE_A;
-    let charAdded = s2.charCodeAt(i + s1.length) - CHARCODE_A;
+    const addedCharIndex = s2.charCodeAt(i) - CHARCODE_A;
+    charFrequency2[addedCharIndex]++;
 
-    // increment the count of the added character
-    // if this character appears the same number of times in the first string,
-    // increment the matched characters count
-    s2Chars[charAdded]++;
-    if (s2Chars[charAdded] === s1Chars[charAdded]) {
-      matchedCharsCount++;
-      // if this character's count previously matched that of the first string,
-      // decrement the matched characters count
-    } else if (s2Chars[charAdded] === s1Chars[charAdded] + 1) {
-      matchedCharsCount--;
+    if (charFrequency2[addedCharIndex] === charFrequency[addedCharIndex]) {
+      matchCount++;
     }
 
-    // do the same for the removed character
-    s2Chars[charRemoved]--;
-    if (s2Chars[charRemoved] === s1Chars[charRemoved]) {
-      matchedCharsCount++;
-    } else if (s2Chars[charRemoved] === s1Chars[charRemoved] - 1) {
-      matchedCharsCount--;
+    if (charFrequency2[addedCharIndex] === charFrequency[addedCharIndex] + 1) {
+      matchCount--;
+    }
+
+    if (i >= s1.length) {
+      const removedCharIndex = s2.charCodeAt(i - s1.length) - CHARCODE_A;
+      charFrequency2[removedCharIndex]--;
+
+      if (
+        charFrequency[removedCharIndex] === charFrequency2[removedCharIndex]
+      ) {
+        matchCount++;
+      }
+
+      if (
+        charFrequency2[removedCharIndex] ===
+        charFrequency[removedCharIndex] - 1
+      ) {
+        matchCount--;
+      }
     }
   }
 
-  // if all the characters match, return true
-  // else, return false
-  return matchedCharsCount === 26;
+  return matchCount === 26;
 };
