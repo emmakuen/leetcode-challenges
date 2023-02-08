@@ -47,3 +47,25 @@ const jump = function (nums) {
 
   return minStepsFor[nums.length - 1];
 };
+
+const jumpWindow = (nums) => {
+  let jumpCount = 0;
+  let startIndex = 0;
+  let endIndex = 0;
+  let maxReachableIndex = 0;
+
+  // iterate until we reach the last number
+  while (endIndex < nums.length - 1) {
+    // find the maximum reachable index from the current window
+    for (let i = startIndex; i <= endIndex; i++) {
+      maxReachableIndex = Math.max(maxReachableIndex, i + nums[i]);
+    }
+
+    //update the window and increment the jump count
+    startIndex = endIndex + 1;
+    endIndex = maxReachableIndex;
+    jumpCount++;
+  }
+
+  return jumpCount;
+};
