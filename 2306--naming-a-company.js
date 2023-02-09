@@ -35,7 +35,7 @@
 // ideas[i] consists of lowercase English letters.
 // All the strings in ideas are unique.
 
-const OFFSET = 97;
+const OFFSET = "a".charCodeAt(0);
 
 /**
  * @param {string[]} ideas
