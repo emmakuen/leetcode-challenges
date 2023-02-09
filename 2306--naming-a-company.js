@@ -43,7 +43,7 @@ const OFFSET = 97;
  */
 const distinctNames = function (ideas) {
   let validNameCount = 0;
-  let ideasByInitial = Array.from(Array(26), () => new Set());
+  const ideasByInitial = Array.from(Array(26), () => new Set());
 
   for (const idea of ideas) {
     const initial = idea.charCodeAt(0) - OFFSET;
