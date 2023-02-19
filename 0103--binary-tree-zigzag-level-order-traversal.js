@@ -24,7 +24,6 @@ const zigzagLevelOrder = function (root) {
     const level = [];
     for (let i = 0; i < length; i++) {
       const node = queue.shift();
-      if (!node) continue;
 
       level.push(node.val);
       node.left && queue.push(node.left);
