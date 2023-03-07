@@ -37,5 +37,3 @@ const convert = function (s, numRows) {
 
   return rows.reduce((str, row) => str.concat(row.join("")), "");
 };
-
-console.log(convert("PAYPALISHIRING", 4));
