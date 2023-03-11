@@ -23,9 +23,9 @@ var sortedListToBST = function (head) {
   if (head === mid) return root;
 
   // recursively build the left and right subtrees
-  // the left subtree is the sublist from the head to the node before the mid
+  // the left subtree is composed of the sublist from the head to the node before the mid
   root.left = sortedListToBST(head);
-  // the right subtree is the sublist from the node after the mid to the tail
+  // the right subtree is composed of the sublist from the node after the mid to the tail
   root.right = sortedListToBST(mid.next);
 
   return root;
