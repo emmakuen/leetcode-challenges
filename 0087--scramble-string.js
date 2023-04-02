@@ -1,50 +1,52 @@
-const hasSameChars = (word1, word2) => {
-  if (word1.length !== word2.length) return false;
+var isScramble = function (s1, s2) {
+  const totalLength = s1.length;
 
-  const charCount = {};
+  // Initialize a 3D array to store the intermediate results
+  const canScramble = new Array(totalLength + 1)
+    .fill(null)
+    .map(() =>
+      new Array(totalLength)
+        .fill(null)
+        .map(() => new Array(totalLength).fill(false))
+    );
 
-  for (let i = 0; i < word1.length; i++) {
-    const char1 = word1[i];
-    const char2 = word2[i];
-    charCount[char1] = char1 in charCount ? charCount[char1] + 1 : 1;
-    charCount[char2] = char2 in charCount ? charCount[char2] - 1 : -1;
-  }
-
-  for (const char in charCount) {
-    if (charCount[char] !== 0) return false;
-  }
-
-  return true;
-};
-
-/**
- * @param {string} s1
- * @param {string} s2
- * @return {boolean}
- */
-var isScramble = function (s1, s2, memo = {}) {
-  const key = `${s1}-${s2}`;
-  if (key in memo) return memo[key];
-  if (s1 === s2) return true;
-  if (!hasSameChars(s1, s2)) {
-    memo[key] = false;
-    return false;
-  }
-
-  const length = s1.length;
-
-  for (let i = 1; i < length; i++) {
-    if (
-      (isScramble(s1.slice(0, i), s2.slice(0, i), memo) &&
-        isScramble(s1.slice(i), s2.slice(i), memo)) ||
-      (isScramble(s1.slice(0, i), s2.slice(length - i), memo) &&
-        isScramble(s1.slice(i), s2.slice(0, length - i), memo))
-    ) {
-      memo[key] = true;
-      return true;
+  // Initialize the base case where the two strings have length 1
+  for (let i = 0; i < totalLength; i++) {
+    for (let j = 0; j < totalLength; j++) {
+      canScramble[1][i][j] = s1[i] === s2[j];
     }
   }
 
-  memo[key] = false;
-  return false;
+  // Solve the subproblems in a bottom-up manner
+  for (let len = 2; len <= totalLength; len++) {
+    for (let i = 0; i <= totalLength - len; i++) {
+      for (let j = 0; j <= totalLength - len; j++) {
+        for (let k = 1; k < len; k++) {
+          // Partition s1[0,len) into two parts: s1[0,k) and s1[k,len)
+          // Check if s1[0,k) can be scrambled to get s2[0,k)
+          const canScrambleLeft = canScramble[k][i][j];
+          // Check if s1[k,n) can be scrambled to get s2[k,n)
+          const canScrambleRight = canScramble[len - k][i + k][j + k];
+          // Check if s1[0,k) can be scrambled to get s2[len-k,n)
+          const canScrambleLeftReverse = canScramble[k][i][j + len - k];
+          // Check if s1[k,n) can be scrambled to get s2[0,len-k)
+          const canScrambleRightReverse = canScramble[len - k][i + k][j];
+
+          // Check if s1[0,k) can be scrambled to get s2[0,k) and s1[k,n) can be scrambled to get s2[k,n)
+          // OR if s1[0,k) can be scrambled to get s2[len-k,n) and s1[k,n) can be scrambled to get s2[0,len-k)
+          if (
+            (canScrambleLeft && canScrambleRight) ||
+            (canScrambleLeftReverse && canScrambleRightReverse)
+          ) {
+            // If either case is true, s1[0,len) can be scrambled to get s2[0,len)
+            canScramble[len][i][j] = true;
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  // The answer is stored in canScramble[n][0][0]
+  return canScramble[totalLength][0][0];
 };
