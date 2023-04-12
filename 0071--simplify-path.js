@@ -8,8 +8,7 @@ var simplifyPath = function (path) {
 
   for (const dir of dirs) {
     if (dir === "" || dir === ".") continue;
-    else if (dir === "..") simplifiedPath.pop();
-    else simplifiedPath.push(dir);
+    dir === ".." ? simplifiedPath.pop() : simplifiedPath.push(dir);
   }
 
   return "/" + simplifiedPath.join("/");
