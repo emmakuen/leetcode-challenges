@@ -1,8 +1,21 @@
-/**
- * @param {number[]} pushed
- * @param {number[]} popped
- * @return {boolean}
- */
+// Stack solution
+var validateStackSequences = function (pushed, popped) {
+  let popIndex = 0;
+  const stack = [];
+
+  for (const pushValue of pushed) {
+    stack.push(pushValue);
+
+    while (stack.length > 0 && stack[stack.length - 1] === popped[popIndex]) {
+      stack.pop();
+      popIndex++;
+    }
+  }
+
+  return stack.length === 0;
+};
+
+// O(1) Space Solution
 var validateStackSequences = function (pushed, popped) {
   let popIndex = 0;
   let pushIndex = 0;
