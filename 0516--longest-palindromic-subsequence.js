@@ -17,3 +17,27 @@ var longestPalindromeSubseq = function (s) {
 
   return dp[0][s.length - 1];
 };
+
+// Recursive
+var longestPalindromeSubseq = function (s) {
+  const maxLengthFor = {};
+
+  return getMaxLengthFor(0, s.length - 1);
+
+  function getMaxLengthFor(start, end) {
+    const substring = `${start}-${end}`;
+    if (substring in maxLengthFor) return maxLengthFor[substring];
+    if (start > end) return 0;
+    if (start === end) return 1;
+
+    if (s[start] === s[end]) {
+      maxLengthFor[substring] = getMaxLengthFor(start + 1, end - 1) + 2;
+    } else {
+      maxLengthFor[substring] = Math.max(
+        getMaxLengthFor(start + 1, end),
+        getMaxLengthFor(start, end - 1)
+      );
+    }
+    return maxLengthFor[substring];
+  }
+};
